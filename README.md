@@ -1,36 +1,12 @@
-# Local Development API Server
-## Usage
-#### Get Restaurants
-```
-curl "http://localhost:1337/restaurants"
-```
-#### Get Restaurants by id
-````
-curl "http://localhost:1337/restaurants/{3}"
-````
+# Restaurant Stage 2
 
-## Architecture
-Local server
-- Node.js
-- Sails.js
+An progressive web app displaying various restaurants info across a map over New York City.
 
-## Contributors
+This app uses a server to host the JSON file and one for the front-end server.
 
-- [Brandy Lee Camacho - Technical Project Manager](mailto:brandy.camacho@udacity.com)
-- [David Harris - Web Services Lead](mailto:david.harris@udacity.com)
-- [Omar Albeik - Frontend engineer](mailto:omaralbeik@gmail.com)
+## Get Started
 
-## Getting Started
-
-### Development local API Server
-_Location of server = /server_
-Server depends on [node.js LTS Version: v6.11.2 ](https://nodejs.org/en/download/), [npm](https://www.npmjs.com/get-npm), and [sails.js](http://sailsjs.com/)
-Please make sure you have these installed before proceeding forward.
-
-Great, you are ready to proceed forward; awesome!
-
-Let's start with running commands in your terminal, known as command line interface (CLI)
-
+To install the project please follow the instructions below.
 ###### Install project dependancies
 ```Install project dependancies
 # npm i
@@ -43,10 +19,9 @@ Let's start with running commands in your terminal, known as command line interf
 ```Start server
 # node server
 ```
-### You should now have access to your API server environment
-debug: Environment : development
-debug: Port        : 1337
 
+## Setting up the front-end server
 
-If you find a bug in the source code or a mistake in the documentation, you can help us by
-submitting an issue to our [Waffle Dashboard](https://waffle.io/udacity/mwnd-issues). Even better you can submit a Pull Request with a fix :)
+```Start Server
+# gulp default
+```
