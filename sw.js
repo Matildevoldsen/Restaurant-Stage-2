@@ -1,75 +1,67 @@
-var version = 'v1::'; //Version of cache
-let cachedFiles = [
-    '/css/styles.css',
-    '/js/main.js',
-    '/index.html',
-    '/restaurant.html',
-    '/img/1.jpg',
-    '/img/2.jpg',
-    '/img/3.jpg',
-    '/img/4.jpg',
-    '/img/5.jpg',
-    '/img/6.jpg',
-    '/img/7.jpg',
-    '/img/8.jpg',
-    '/img/9.jpg',
-    '/img/10.jpg',
-    '/js/dbhelper.js',
-    'data/restaurants.json',
-    '/js/restaurant_info.js',
+var staticCacheName = 'mws-restaurant';
+var fileToCache = [
+    'index.html',
+    'restaurant.html',
+    'js/dbhelper.js',
+    'js/main.js',
+    'js/restaurant_info.js',
+    'sw.js',
+    'css/styles.css',
+    'css/responsive.css',
+    'img/1.jpg',
+    'img/2.jpg',
+    'img/3.jpg',
+    'img/4.jpg',
+    'img/5.jpg',
+    'img/6.jpg',
+    'img/7.jpg',
+    'img/8.jpg',
+    'img/9.jpg',
+    'img/10.jpg',
+    'img/48x.png',
+    'img/96x.png',
+    'img/192x.png',
+    'img/512.png',
+    'img/p.png',
 ];
 
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').then(function () {
-        console.log('service worker registration complete.');
-    }, function () {
-        console.log('service worker registration failure.');
-    });
-} else {
-    // console.log('service worker is not supported.');
-}
-
-self.addEventListener("install", function (event) {
-    // console.log('install event in progress.');
+self.addEventListener('install', function(event) {
+    console.log('service worker installed');
     event.waitUntil(
-        caches.open(version + 'fundamentals')
-            .then(function (cache) {
-                return cache.addAll(cachedFiles);
-            })
+        caches.open(staticCacheName).then(function(cache) {
+            console.log('serviceWorker is caching app shell');
+            return cache.addAll(fileToCache);
+        })
+    );
+});
+
+self.addEventListener('activate', function(event) {
+    console.log('Activating new service worker...');
+    event.waitUntil(
+        caches.keys().then(function(cacheNames) {
+            return Promise.all(
+                cacheNames.filter(function(cacheName) {
+                    return cacheName.startsWith('nws-') &&
+                        cacheName != staticCacheName;
+                }).map(function(cacheName) {
+                    return caches.delete(cacheName);
+                })
+            ).then(() => { console.log('Service worker active');} );
+        })
     );
 });
 
 self.addEventListener('fetch', function(event) {
-    console.log("Service Worker fetch");
-    event.respondWith(
-        caches.open(version).then(function(cache) {
-            return cache.match(event.request).then(function (response) {
-                return response || fetch(event.request).then(function(response) {
-                    cache.put(event.request, response.clone());
-                    return response;
-                });
-            });
-        }).catch(function (err) {
-            console.log("Error: Service worker fetch failed: ", err);
-        })
-    );
-});
-
-self.addEventListener('activate', function(event){
-    console.log('Service Worker activated');
-    event.waitUntil(
-        caches.keys().then(function(cache){
-            return Promise.all(cache.map(function(currentCacheName){
-                if (currentCacheName !== version ) {
-                    caches.delete(currentCacheName);
-                }
-            }))
-        })
-    )
+    console.info('Event: Fetch');
+    console.log(event.request);
+    event.respondWith(fromCache(event.request).catch((error) => {
+        console.log(error);
+    }));
+    event.waitUntil(update(event.request));
 });
 
 function fromCache(request) {
-    return caches.open(version).then(function (cache) {
+    return caches.open(staticCacheName).then(function(cache) {
         return cache.match(request).then(function (matching) {
             return matching || fetch(request);
         });
@@ -77,9 +69,15 @@ function fromCache(request) {
 }
 
 function update(request) {
-    return caches.open(version).then(function (cache) {
+    return caches.open(staticCacheName).then(function(cache) {
         return fetch(request).then(function (response) {
             return cache.put(request, response);
         });
     });
 }
+
+self.addEventListener('message', function(event) {
+    if (event.data.action === 'skipWaiting') {
+        self.skipWaiting();
+    }
+});

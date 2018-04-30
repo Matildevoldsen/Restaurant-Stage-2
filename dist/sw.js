@@ -1,1 +1,83 @@
-"use strict";var version="v1::",cachedFiles=["/css/styles.css","/js/main.js","/index.html","/restaurant.html","/img/1.jpg","/img/2.jpg","/img/3.jpg","/img/4.jpg","/img/5.jpg","/img/6.jpg","/img/7.jpg","/img/8.jpg","/img/9.jpg","/img/10.jpg","/js/dbhelper.js","data/restaurants.json","/js/restaurant_info.js"];function fromCache(n){return caches.open(version).then(function(e){return e.match(n).then(function(e){return e||fetch(n)})})}function update(t){return caches.open(version).then(function(n){return fetch(t).then(function(e){return n.put(t,e)})})}"serviceWorker"in navigator&&navigator.serviceWorker.register("/sw.js").then(function(){console.log("service worker registration complete.")},function(){console.log("service worker registration failure.")}),self.addEventListener("install",function(e){e.waitUntil(caches.open(version+"fundamentals").then(function(e){return e.addAll(cachedFiles)}))}),self.addEventListener("fetch",function(t){console.log("Service Worker fetch"),t.respondWith(caches.open(version).then(function(n){return n.match(t.request).then(function(e){return e||fetch(t.request).then(function(e){return n.put(t.request,e.clone()),e})})}).catch(function(e){console.log("Error: Service worker fetch failed: ",e)}))}),self.addEventListener("activate",function(e){console.log("Service Worker activated"),e.waitUntil(caches.keys().then(function(e){return Promise.all(e.map(function(e){e!==version&&caches.delete(e)}))}))});
+var staticCacheName = 'mws-restaurant';
+var fileToCache = [
+    'index.html',
+    'restaurant.html',
+    'js/dbhelper.js',
+    'js/main.js',
+    'js/restaurant_info.js',
+    'sw.js',
+    'css/styles.css',
+    'css/responsive.css',
+    'img/1.jpg',
+    'img/2.jpg',
+    'img/3.jpg',
+    'img/4.jpg',
+    'img/5.jpg',
+    'img/6.jpg',
+    'img/7.jpg',
+    'img/8.jpg',
+    'img/9.jpg',
+    'img/10.jpg',
+    'img/48x.png',
+    'img/96x.png',
+    'img/192x.png',
+    'img/512.png',
+    'img/p.png',
+];
+
+self.addEventListener('install', function(event) {
+    console.log('service worker installed');
+    event.waitUntil(
+        caches.open(staticCacheName).then(function(cache) {
+            console.log('serviceWorker is caching app shell');
+            return cache.addAll(fileToCache);
+        })
+    );
+});
+
+self.addEventListener('activate', function(event) {
+    console.log('Activating new service worker...');
+    event.waitUntil(
+        caches.keys().then(function(cacheNames) {
+            return Promise.all(
+                cacheNames.filter(function(cacheName) {
+                    return cacheName.startsWith('nws-') &&
+                        cacheName != staticCacheName;
+                }).map(function(cacheName) {
+                    return caches.delete(cacheName);
+                })
+            ).then(() => { console.log('Service worker active');} );
+        })
+    );
+});
+
+self.addEventListener('fetch', function(event) {
+    console.info('Event: Fetch');
+    console.log(event.request);
+    event.respondWith(fromCache(event.request).catch((error) => {
+        console.log(error);
+    }));
+    event.waitUntil(update(event.request));
+});
+
+function fromCache(request) {
+    return caches.open(staticCacheName).then(function(cache) {
+        return cache.match(request).then(function (matching) {
+            return matching || fetch(request);
+        });
+    });
+}
+
+function update(request) {
+    return caches.open(staticCacheName).then(function(cache) {
+        return fetch(request).then(function (response) {
+            return cache.put(request, response);
+        });
+    });
+}
+
+self.addEventListener('message', function(event) {
+    if (event.data.action === 'skipWaiting') {
+        self.skipWaiting();
+    }
+});

@@ -10,7 +10,7 @@ var imagemin = require('gulp-imagemin');
 var imageminPngquant = require('imagemin-pngquant');
 var cleanCSS = require('gulp-clean-css');
 
-gulp.task('default', ['copy-html', 'styles', 'copy-images', 'copy-manifest', 'css', 'copy-scripts'], function() {
+gulp.task('default', ['copy-html', 'styles', 'copy-images', 'copy-manifest', 'copy-scripts'], function() {
     gulp.watch('js/**/*.js');
     gulp.watch('/*.html', ['copy-html']);
     gulp.watch('./dist/*.html').on('change', browserSync.reload);
@@ -52,7 +52,6 @@ gulp.task('scripts-dist', function() {
                 }]
             ]
         }))
-
         .on('error', function(err) {
             console.log('[ERROR] '+ err.toString() );
         })
