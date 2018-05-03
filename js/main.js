@@ -1,30 +1,22 @@
-/*eslint-env es6*/
-
-/*eslint-disable no-unused-vars*/
 let restaurants,
     neighborhoods,
     cuisines;
 let map;
 var markers = [];
-/*eslint-enable no-unused-vars*/
 
 /**
  * Initialize ServiceWorker, fetch neighborhoods and cuisines as soon
  * as the page is loaded.
  */
-/*eslint-disable no-unused-vars*/
-/*eslint-disable no-undef*/
 document.addEventListener('DOMContentLoaded', (event) => {
     DBHelper.startServiceWorker();
     this.fetchNeighborhoods();
     this.fetchCuisines();
 });
-/*eslint-enable no-unused-vars*/
-
 /**
  * Fetch all neighborhoods and set their HTML.
  */
-/*eslint-disable no-undef*/
+
 fetchNeighborhoods = () => {
     DBHelper.fetchNeighborhoods((error, neighborhoods) => {
         if (error) { // Got an error
@@ -187,4 +179,3 @@ addMarkersToMap = (restaurants = self.restaurants) => {
         this.markers.push(marker);
     });
 };
-/*eslint-disable no-undef*/

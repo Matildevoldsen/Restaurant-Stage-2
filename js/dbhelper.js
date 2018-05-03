@@ -1,19 +1,18 @@
-/*eslint-env es6*/
 const IDB_DB = 'restaurantDb';
 const IDB_OBJ = 'restaurantObj';
+
 /**
  * Common database helper functions.
  */
-/*eslint-disable no-unused-vars*/
+
 class DBHelper {
     /**
-     * Database URL from API server
+     * JSON URL to get content
      */
     static get DATABASE_URL() {
         const port = 1337; // Change this to your server port
         const server = 'localhost';
         return `http://${server}:${port}/restaurants`;
-        //return 'data/restaurants.json';
     }
 
     /*
@@ -39,7 +38,7 @@ class DBHelper {
      */
     static idbSave(data){
         return DBHelper.idbOpen().then(function(db){
-            if(!db)
+            if(!db) // Checks if empty.
                 return;
 
             var tx = db.transaction(IDB_OBJ, 'readwrite');
@@ -47,7 +46,7 @@ class DBHelper {
             data.forEach(function(restaurant){
                 store.put(restaurant);
             });
-            return tx.complete;
+            return tx.complete; // Returning data from DB
         });
     }
 
