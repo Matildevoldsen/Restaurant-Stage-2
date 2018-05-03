@@ -7,7 +7,18 @@ This app uses a server to host the JSON file and one for the front-end server.
 ## Get Started
 
 To install the project please follow the instructions below.
-###### Install project dependancies
+
+**This project uses gulp and sails**
+
+###### Install front-end part
+```Install project dependancies
+# npm install
+```
+###### Go into the server directory
+```Server Directory
+# cd server
+```
+###### Install project dependencies
 ```Install project dependancies
 # npm i
 ```
@@ -25,3 +36,6 @@ To install the project please follow the instructions below.
 ```Start Server
 # gulp default
 ```
+
+# Style Guide
+This project follows Udacity style code. Read more about it here: http://udacity.github.io/frontend-nanodegree-styleguide/index.html
