@@ -71,7 +71,7 @@ self.addEventListener('fetch', function (event) {
         && (event.request.mode !== 'same-origin')) {
         return;
     }
-
+    // Caching Files
     var requestUrl = new URL(event.request.url);
     const index = event.request.url + "index.html";
 
@@ -101,7 +101,7 @@ self.addEventListener('fetch', function (event) {
  * Return the retuarant html template, ignoring id
  */
 function serveRestuarantPage(request, url) {
-    var storageUrl = request.url.replace(/\?id=\d/, '');
+    var storageUrl = request.url.replace(/\?id=\d/, ''); // Ensuring that id's isn't relevant for service worker
     return servePage(request, storageUrl);
 }
 
