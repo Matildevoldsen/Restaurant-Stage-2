@@ -62,11 +62,6 @@ self.addEventListener('activate', function (event) {
  * Intercept requests and respond with cache or make a request to the server.
  */
 self.addEventListener('fetch', function (event) {
-    /*
-      DevTools opening will trigger these o-i-c requests,
-      which this SW can't handle.
-      https://github.com/paulirish/caltrainschedule.io/pull/51
-    */
     if ((event.request.cache === 'only-if-cached')
         && (event.request.mode !== 'same-origin')) {
         return;

@@ -62,16 +62,11 @@ self.addEventListener('activate', function (event) {
  * Intercept requests and respond with cache or make a request to the server.
  */
 self.addEventListener('fetch', function (event) {
-    /*
-      DevTools opening will trigger these o-i-c requests,
-      which this SW can't handle.
-      https://github.com/paulirish/caltrainschedule.io/pull/51
-    */
     if ((event.request.cache === 'only-if-cached')
         && (event.request.mode !== 'same-origin')) {
         return;
     }
-
+    // Caching Files
     var requestUrl = new URL(event.request.url);
     const index = event.request.url + "index.html";
 
@@ -101,7 +96,7 @@ self.addEventListener('fetch', function (event) {
  * Return the retuarant html template, ignoring id
  */
 function serveRestuarantPage(request, url) {
-    var storageUrl = request.url.replace(/\?id=\d/, '');
+    var storageUrl = request.url.replace(/\?id=\d/, ''); // Ensuring that id's isn't relevant for service worker
     return servePage(request, storageUrl);
 }
 
