@@ -172,11 +172,10 @@ nav h1 a {
     max-height: 476px;
     flex-wrap: wrap;
 
-    min-height: 830px;
+    min-height: 500px;
 }
 
 #restaurants-list li:last-child, #restaurants-list li:first-child {
-
     width: 330px !important;
     max-width: 330px !important;
     min-width: 330px !important;
@@ -186,9 +185,9 @@ nav h1 a {
 #restaurants-list .restaurant-img {
     background-color: #ccc;
     max-width: 100%;
-    height: auto;
+    height: 266px;
     min-width: 100%;
-    min-height: 266px;
+    min-height: auto;
 }
 
 #restaurants-list li h2{

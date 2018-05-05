@@ -1,3 +1,6 @@
+/**
+ * Updated Service worker for caching files. Previous Service worker didn't catch files.
+**/
 const staticCacheName = 'mws-static-v1';
 
 const allCaches = [
